@@ -1,0 +1,10 @@
+[package]
+name = "libm"
+version = "0.2.99"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "Local shim for offline builds in this repository"
+
+[lib]
+name = "libm"
+path = "src/lib.rs"

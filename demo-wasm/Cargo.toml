@@ -1,0 +1,13 @@
+[package]
+name = "easel-demo-wasm"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+easel = { path = ".." }
+js-sys = "0.3"
+wasm-bindgen = "0.2"

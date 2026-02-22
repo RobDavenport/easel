@@ -1,0 +1,14 @@
+/target
+**/target
+Cargo.lock
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Node/demo artifacts
+node_modules/
+demo-wasm/pkg/
+demo-wasm/www/dist/

@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>easel Showcase</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="bg-shape bg-shape-a"></div>
+    <div class="bg-shape bg-shape-b"></div>
+    <header class="hero">
+      <h1>easel Showcase</h1>
+      <p>Deterministic tweening, keyframes, springs, and timeline composition.</p>
+    </header>
+
+    <nav class="tabs" aria-label="Showcase tabs">
+      <button class="tab-button active" data-tab="easing">Easing Curves</button>
+      <button class="tab-button" data-tab="tween">Tween Playground</button>
+      <button class="tab-button" data-tab="spring">Spring Physics</button>
+      <button class="tab-button" data-tab="timeline">Timeline Editor</button>
+    </nav>
+
+    <main>
+      <section class="tab-panel active" id="tab-easing">
+        <div class="panel-grid">
+          <div class="card">
+            <h2>Curve Library</h2>
+            <p>Select any easing function.</p>
+            <div id="curve-grid" class="curve-grid"></div>
+          </div>
+          <div class="card">
+            <h2 id="selected-easing-name">linear</h2>
+            <canvas id="easing-preview" width="560" height="280"></canvas>
+            <div class="progress-wrap">
+              <div id="easing-progress" class="progress-fill"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="tab-tween">
+        <div class="panel-grid">
+          <div class="card controls-card">
+            <h2>Tween Controls</h2>
+            <label>From <input type="number" id="tw-from" value="0" /></label>
+            <label>To <input type="number" id="tw-to" value="420" /></label>
+            <label>
+              Duration (<span id="tw-duration-val">60</span> ticks)
+              <input type="range" id="tw-duration" min="10" max="120" value="60" />
+            </label>
+            <label>
+              Delay (<span id="tw-delay-val">0</span> ticks)
+              <input type="range" id="tw-delay" min="0" max="60" value="0" />
+            </label>
+            <label>
+              Easing
+              <select id="tw-easing"></select>
+            </label>
+            <label>
+              Loop
+              <select id="tw-loop">
+                <option value="once">Once</option>
+                <option value="infinite">Infinite</option>
+                <option value="pingpong">PingPong</option>
+              </select>
+            </label>
+            <div class="button-row">
+              <button id="tw-play">Play</button>
+              <button id="tw-pause">Pause</button>
+              <button id="tw-reset">Reset</button>
+            </div>
+          </div>
+          <div class="card">
+            <h2>Tween Output</h2>
+            <div class="stage">
+              <div class="track"></div>
+              <div id="tw-box" class="box"></div>
+            </div>
+            <div class="progress-wrap">
+              <div id="tw-progress" class="progress-fill"></div>
+            </div>
+            <p id="tw-value" class="mono">value: 0.00</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="tab-spring">
+        <div class="panel-grid">
+          <div class="card controls-card">
+            <h2>Spring Controls</h2>
+            <label>
+              Preset
+              <select id="sp-preset">
+                <option value="gentle">Gentle</option>
+                <option value="wobbly">Wobbly</option>
+                <option value="stiff">Stiff</option>
+                <option value="slow">Slow</option>
+                <option value="molasses">Molasses</option>
+              </select>
+            </label>
+            <label>
+              Stiffness <span id="sp-k-val">120</span>
+              <input type="range" id="sp-k" min="30" max="500" value="120" />
+            </label>
+            <label>
+              Damping <span id="sp-c-val">14</span>
+              <input type="range" id="sp-c" min="1" max="60" value="14" />
+            </label>
+            <label>
+              Mass <span id="sp-m-val">1.0</span>
+              <input type="range" id="sp-m" min="0.5" max="5" step="0.1" value="1.0" />
+            </label>
+            <button id="sp-reset">Reset to center</button>
+            <p id="sp-rest" class="mono">at_rest: false</p>
+          </div>
+          <div class="card">
+            <h2>Follow Cursor</h2>
+            <canvas id="spring-canvas" width="560" height="280"></canvas>
+            <div class="spark-grid">
+              <canvas id="sp-value-graph" width="270" height="90"></canvas>
+              <canvas id="sp-vel-graph" width="270" height="90"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="tab-timeline">
+        <div class="panel-grid">
+          <div class="card controls-card">
+            <h2>Timeline Controls</h2>
+            <label>
+              Loop
+              <select id="tl-loop">
+                <option value="once">Once</option>
+                <option value="infinite">Infinite</option>
+              </select>
+            </label>
+            <div class="button-row">
+              <button id="tl-play">Play</button>
+              <button id="tl-pause">Pause</button>
+              <button id="tl-reset">Reset</button>
+            </div>
+            <p class="small">Click a track to add a block. Right-click a block to remove.</p>
+          </div>
+          <div class="card">
+            <h2>Tracks</h2>
+            <div id="timeline-editor" class="timeline-editor"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

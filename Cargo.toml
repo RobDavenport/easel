@@ -1,0 +1,9 @@
+[package]
+name = "easel"
+version = "0.1.0"
+edition = "2021"
+description = "A no_std, deterministic tweening and animation primitives library"
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+libm = { path = "vendor/libm" }
