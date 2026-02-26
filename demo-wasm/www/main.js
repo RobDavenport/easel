@@ -547,6 +547,7 @@ const timelineState = {
   ],
 };
 let nextBlockId = 4;
+const DEFAULT_TIMELINE_BLOCK_DURATION = 50;
 
 const timelinePreview = document.createElement("div");
 timelinePreview.className = "stage";
@@ -561,7 +562,8 @@ tlCircle.style.borderRadius = "50%";
 tlTriangle.style.background = "linear-gradient(145deg, #f97316, #fdba74)";
 tlTriangle.style.clipPath = "polygon(50% 0%, 100% 100%, 0% 100%)";
 
-const blocksAtTrack = (track) => [...track.querySelectorAll(".timeline-block")];
+const clampTimelineBlockStart = (start, duration) =>
+  clamp(start, 0, Math.max(0, timelineState.duration - duration));
 
 const renderTimeline = () => {
   timelineEditor.innerHTML = "";
@@ -606,10 +608,11 @@ const renderTimeline = () => {
       if (ev.target !== track) return;
       const rect = track.getBoundingClientRect();
       const t = clamp((ev.clientX - rect.left) / rect.width, 0, 1);
+      const duration = DEFAULT_TIMELINE_BLOCK_DURATION;
       trackData.blocks.push({
         id: nextBlockId++,
-        start: Math.floor(t * timelineState.duration),
-        duration: 50,
+        start: clampTimelineBlockStart(Math.floor(t * timelineState.duration), duration),
+        duration,
         easing: easingNames[(trackData.blocks.length + trackIndex * 3) % easingNames.length],
       });
       renderTimeline();
@@ -629,7 +632,7 @@ window.addEventListener("pointermove", (ev) => {
   const trackData = timelineState.tracks[trackIndex];
   const block = trackData.blocks.find((b) => b.id === blockId);
   if (!block) return;
-  block.start = clamp(originalStart + deltaTicks, 0, timelineState.duration - block.duration);
+  block.start = clampTimelineBlockStart(originalStart + deltaTicks, block.duration);
   renderTimeline();
 });
 window.addEventListener("pointerup", () => {
@@ -663,10 +666,17 @@ const renderTimelinePreview = () => {
   tlSquare.style.position = tlCircle.style.position = tlTriangle.style.position = "absolute";
 };
 
-tlLoop.addEventListener("input", () => {
+const syncTimelineLoopMode = () => {
   timelineState.loop = tlLoop.value;
-});
+};
+tlLoop.addEventListener("change", syncTimelineLoopMode);
+tlLoop.addEventListener("input", syncTimelineLoopMode);
 tlPlay.addEventListener("click", () => {
+  if (timelineState.elapsed >= timelineState.duration) {
+    timelineState.elapsed = 0;
+    renderTimeline();
+    renderTimelinePreview();
+  }
   timelineState.playing = true;
 });
 tlPause.addEventListener("click", () => {
