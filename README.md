@@ -75,3 +75,5 @@ GitHub Actions workflow: `.github/workflows/pages.yml`.
 2. Set source to **GitHub Actions**.
 3. Push to `main`; workflow builds the WASM package and deploys `demo-wasm/www` to Pages.
 4. The deployed site is available at `https://robdavenport.github.io/easel/`.
+5. If `Configure Pages` fails with `Get Pages site failed`, set **Settings -> Pages -> Build and deployment -> Source = GitHub Actions** and rerun.
+6. Optional: add a `PAGES_ENABLEMENT_TOKEN` repository secret (PAT with repository admin/pages permissions) to let the workflow auto-enable Pages on first deploy.
