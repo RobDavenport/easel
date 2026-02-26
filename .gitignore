@@ -11,4 +11,5 @@ Thumbs.db
 # Node/demo artifacts
 node_modules/
 demo-wasm/pkg/
+demo-wasm/www/pkg/
 demo-wasm/www/dist/

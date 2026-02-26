@@ -2,6 +2,10 @@
 
 `easel` is a `no_std` Rust animation primitives library focused on deterministic, tick-based behavior for games and UI runtimes.
 
+## Live Demo
+
+- https://robdavenport.github.io/easel/
+
 ## Features
 
 - Deterministic tick timing (`u32`), no floating time deltas.
@@ -69,4 +73,5 @@ GitHub Actions workflow: `.github/workflows/pages.yml`.
 
 1. Enable GitHub Pages in repository settings.
 2. Set source to **GitHub Actions**.
-3. Push to `main`; workflow deploys `demo-wasm/www` to Pages.
+3. Push to `main`; workflow builds the WASM package and deploys `demo-wasm/www` to Pages.
+4. The deployed site is available at `https://robdavenport.github.io/easel/`.

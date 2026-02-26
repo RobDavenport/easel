@@ -114,6 +114,45 @@ const easingFns = {
 
 const easingNames = Object.keys(easingFns);
 
+const wasmStatusLine = document.getElementById("wasm-status");
+const wasmSnapshotLine = document.getElementById("wasm-snapshot");
+
+let wasmDemo = null;
+let wasmReady = false;
+
+const setWasmStatus = (text, isError = false) => {
+  wasmStatusLine.textContent = text;
+  wasmStatusLine.classList.toggle("error", isError);
+};
+
+const renderWasmSnapshot = () => {
+  if (!wasmDemo || !wasmReady) return;
+  const state = wasmDemo.render_state();
+  const tween = Number.isFinite(state[0]) ? state[0] : 0;
+  const spring = Number.isFinite(state[1]) ? state[1] : 0;
+  const active = Number.isFinite(state[2]) ? state[2] : 0;
+  wasmSnapshotLine.textContent = `tween=${tween.toFixed(3)} spring=${spring.toFixed(3)} active=${Math.round(active)}`;
+};
+
+const initWasm = async () => {
+  try {
+    const wasmModule = await import("./pkg/easel_demo_wasm.js");
+    await wasmModule.default();
+    wasmDemo = new wasmModule.Demo();
+    wasmReady = true;
+    setWasmStatus("WASM core: ready");
+    renderWasmSnapshot();
+  } catch (error) {
+    wasmReady = false;
+    wasmDemo = null;
+    setWasmStatus("WASM core: unavailable (run wasm-pack build)", true);
+    wasmSnapshotLine.textContent = "tween=0.000 spring=0.000 active=0";
+    console.warn("WASM init failed:", error);
+  }
+};
+
+void initWasm();
+
 // Tab switching
 const tabButtons = [...document.querySelectorAll(".tab-button")];
 const tabPanels = [...document.querySelectorAll(".tab-panel")];
@@ -648,6 +687,7 @@ let lastTs = performance.now();
 let tweenAccumulator = 0;
 let springAccumulator = 0;
 let timelineAccumulator = 0;
+let wasmAccumulator = 0;
 
 const frame = (ts) => {
   const dt = ts - lastTs;
@@ -685,6 +725,13 @@ const frame = (ts) => {
     timelineAccumulator -= 1000 / 60;
   }
   renderTimelinePreview();
+
+  wasmAccumulator += dt;
+  while (wasmAccumulator >= 1000 / 60) {
+    if (wasmReady && wasmDemo) wasmDemo.tick();
+    wasmAccumulator -= 1000 / 60;
+  }
+  renderWasmSnapshot();
 
   requestAnimationFrame(frame);
 };
